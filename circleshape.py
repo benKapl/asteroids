@@ -26,4 +26,5 @@ class CircleShape(pygame.sprite.Sprite):
         return True if distance <= (self.radius + other.radius) else False
 
 if __name__ == "__main__":
-    pass
+    c = CircleShape(x= 10, y = 12, radius = 3)
+    print(c.position)

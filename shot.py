@@ -7,8 +7,7 @@ from constants import SHOT_RADIUS, PLAYER_SHOOT_SPEED
 
 class Shot(CircleShape):
     def __init__(self, position):
-        x, y = position
-        super().__init__(x, y, radius=SHOT_RADIUS)
+        super().__init__(position[0], position[-1], radius=SHOT_RADIUS)
         self.add(self.containers) #type: ignore
 
     def draw(self, screen):

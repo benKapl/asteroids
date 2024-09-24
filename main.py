@@ -1,3 +1,5 @@
+from sys import exit
+
 import pygame
 
 from asteroid import Asteroid
@@ -7,6 +9,11 @@ from player import Player
 
 
 def main():
+    print("Starting asteroids!")
+    print("Screen width:", SCREEN_WIDTH)
+    print("Screen height:", SCREEN_HEIGHT)
+
+
     pygame.init()
     # creates screen
     screen = pygame.display.set_mode(size=(SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -22,11 +29,11 @@ def main():
     # Contain Player and Asteroid within their respective groups
     Player.containers = (updatable, drawable) #type: ignore
     Asteroid.containers = (asteroids, updatable, drawable) #type: ignore
-    AsteroidField.containers = (updatable)   
+    AsteroidField.containers = (updatable)  #type: ignore 
 
     # Create player and asteroids
     player = Player(x=SCREEN_WIDTH/2, y=SCREEN_HEIGHT/2)
-    asteroids = AsteroidField()
+    AsteroidField()
 
     while True:
         # Allow user to close the window
@@ -34,11 +41,16 @@ def main():
             if event.type == pygame.QUIT:
                 return
             
-        # Update the updatable position
+        # Update the updatable positions
         for i in updatable:
             i.update(dt)
+        
+        # Check for collisions between player and asteroids
+        for asteroid in asteroids:
+            if player.collides(asteroid):
+                exit("Game over!")
 
-        # render the screen
+        # Render the screen (for each frame)
         pygame.display.flip()
         screen.fill("black")
 
@@ -48,10 +60,6 @@ def main():
         # Draw the drawable
         for i in drawable:
             i.draw(screen)
-    
-    # print("Starting asteroids!")
-    # print("Screen width:", SCREEN_WIDTH)
-    # print("Screen height:", SCREEN_HEIGHT)
 
 if __name__ == "__main__":
     main()

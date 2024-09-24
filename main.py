@@ -3,6 +3,8 @@ import pygame
 from constants import *
 from player import Player
 
+updatable = 0
+
 def main():
     pygame.init()
     # creates screen
@@ -11,16 +13,13 @@ def main():
     clock = pygame.time.Clock()
     dt = 0
 
-    # Create groups and containers
-    # updatable = pygame.sprite.Group()
-    # drawable = pygame.sprite.Group()
-    # Player.containers = (group_a, group_b)
+    # Create groups and at them to Player.containers
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+    Player.containers = (updatable, drawable) #type: ignore
 
-
-
-    # Add Player and add it to both groups
+    # Create player
     player = Player(x=SCREEN_WIDTH/2, y=SCREEN_HEIGHT/2)
-    # player.
 
     while True:
         # Allow user to close the window
@@ -28,8 +27,9 @@ def main():
             if event.type == pygame.QUIT:
                 return
             
-        # Update the player position
-        player.update(dt)
+        # Update the updatable position
+        for i in updatable:
+            i.update(dt)
 
         # render the screen
         pygame.display.flip()
@@ -38,7 +38,9 @@ def main():
         dt_milliseconds = clock.tick(60)
         dt = dt_milliseconds / 1000
 
-        player.draw(screen)
+        # Draw the drawable
+        for i in drawable:
+            i.draw(screen)
     
     # print("Starting asteroids!")
     # print("Screen width:", SCREEN_WIDTH)
